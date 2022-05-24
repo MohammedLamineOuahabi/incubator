@@ -4,7 +4,9 @@
 #define ONE_WIRE_BUS 3
 
 // For the non-volatile storage.
-#include <EEPROM.h> //EEPROM.write(addr, val); val = EEPROM.read(address);
+#include <EEPROM.h> 
+//EEPROM.write(addr, val); 
+//val = EEPROM.read(address);
 
 // For the DHT11 humidity sensor.
 #include <dht.h>
