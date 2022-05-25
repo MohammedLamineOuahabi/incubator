@@ -16,7 +16,6 @@ const int d4 = 5;
 const int d5 = 4;
 const int d6 = 3;
 const int d7 = 2;
-int ack = 0;
 int pos = 0;
 int sec = 0;
 int Min = 0;
@@ -120,7 +119,7 @@ void loop()
     }
     SET = 1;
   }
-  ack = 0;
+
   float h = dht.readHumidity();
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
@@ -129,50 +128,44 @@ void loop()
   if (isnan(h) || isnan(t))
   {
     Serial.println(F("Failed to read from DHT sensor!"));
-    return;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("No Sensor data.");
+    lcd.setCursor(0, 1);
+    lcd.print("System Halted.");
+    digitalWrite(bulb, LOW);
+    digitalWrite(vap, LOW);
   }
-
   else
   {
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Temp:");
-    lcd.print(dht.temperature);
+    lcd.print(t);
     lcd.setCursor(0, 1);
     lcd.print("Humidity:");
-    lcd.print(dht.humidity);
-    if (dht.temperature >= T_threshold)
+    lcd.print(h);
+
+    if (t >= T_threshold)
     {
-      delay(3000);
-      if (dht.temperature >= T_threshold)
-      {
-        digitalWrite(bulb, LOW);
-      }
+      digitalWrite(bulb, LOW);
     }
-    if (dht.humidity >= H_threshold)
+
+    if (h >= H_threshold)
     {
-      delay(3000);
-      if (dht.humidity >= H_threshold)
-      {
-        digitalWrite(vap, LOW);
-      }
+      digitalWrite(vap, LOW);
     }
-    if (dht.temperature < T_threshold)
+
+    if (t < T_threshold)
     {
-      delay(3000);
-      if (dht.temperature < T_threshold)
-      {
-        digitalWrite(bulb, HIGH);
-      }
+      digitalWrite(bulb, HIGH);
     }
-    if (dht.humidity < H_threshold)
+
+    if (h < H_threshold)
     {
-      delay(3000);
-      if (dht.humidity < H_threshold)
-      {
-        digitalWrite(vap, HIGH);
-      }
+      digitalWrite(vap, HIGH);
     }
+
     sec = sec + 1;
     if (sec == 60)
     {
@@ -186,7 +179,7 @@ void loop()
     }
     if (hrs == 8 && Min == 0 && sec == 0)
     {
-      for (pos = 0; pos &lt; = 180; pos += 1)
+      for (pos = 0; pos <= 180; pos += 1)
       {
         motor.write(pos);
         delay(25);
@@ -202,16 +195,7 @@ void loop()
       }
     }
   }
-  if (ack == 1)
-  {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("No Sensor data.");
-    lcd.setCursor(0, 1);
-    lcd.print("System Halted.");
-    digitalWrite(bulb, LOW);
-    digitalWrite(vap, LOW);
-  }
+
   delay(1000);
 }
 
