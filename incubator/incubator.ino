@@ -45,6 +45,7 @@ void setup()
   motor.write(pos);
   lcd.begin(16, 2);
   Serial.begin(9600);
+    Serial.print("Digital Incubator ");
   lcd.setCursor(5, 0);
   lcd.print("Digital");
   lcd.setCursor(4, 1);
